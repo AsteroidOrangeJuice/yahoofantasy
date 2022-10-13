@@ -23,9 +23,9 @@ class Player:
         self.first_name = first_name
         self.last_name = last_name
 
-    @staticmethod
-    def from_response(resp, league):
-        p = Player(
+    @classmethod
+    def from_response(cls, resp, league):
+        p = cls(
             league=league,
             player_id=get_value(resp["player_id"]),
             first_name=get_value(resp["name"]["first"]),

@@ -14,9 +14,7 @@ if TYPE_CHECKING:
 from yahoofantasy.util.logger import logger
 from yahoofantasy.api.parse import as_list, from_response_object
 from yahoofantasy.util.persistence import DEFAULT_TTL
-from typing import TYPE_CHECKING
-if TYPE_CHECKING:
-    from .player import Player
+from .player import Player
 from .roster import Roster
 
 
@@ -40,7 +38,7 @@ class Team:
                  number_of_moves: int,
                  number_of_trades: int,
                  draft_position: int,
-                 managers_dict: dict
+                 managers_dict: dict,
                  ):
         self.ctx = ctx
         self.league = league
@@ -71,8 +69,8 @@ class Team:
     def players(self, persist_ttl=DEFAULT_TTL) -> List[Player]:
         logger.debug("Looking up current players on team")
         data = self.ctx._load_or_fetch(
-            f"team.{self.id}.players",
-            f"team/{self.id}/players",
+            f"team.{self.team_key}.players",
+            f"team/{self.team_key}/players",
         )
         players = []
         for p in data['fantasy_content']['team']['players']['player']:
@@ -92,8 +90,8 @@ class Team:
         if week_num:
             keys = (str(week_num), f"week={week_num}")
         data = self.ctx._load_or_fetch(
-            f"team.{self.id}.roster.{keys[0]}",
-            f"team/{self.id}/roster;{keys[1]}",
+            f"team.{self.team_key}.roster.{keys[0]}",
+            f"team/{self.team_key}/roster;{keys[1]}",
         )
         roster_data = data['fantasy_content']['team']['roster']
         roster = Roster(self, week_num)

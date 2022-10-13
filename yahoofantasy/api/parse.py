@@ -44,6 +44,8 @@ def as_list(val):
 
 def from_response_object(obj, resp, set_raw=False):
     """ Sets the attributes on obj based on resp """
+
+    # logger.warn("from_response_object called")
     if not isinstance(resp, dict):
         raise RuntimeError(
             "Cannot parse response object that isn't dict")

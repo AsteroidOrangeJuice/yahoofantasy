@@ -71,7 +71,7 @@ class League:
                 get_value(team['draft_position']),
                 team['managers'],
             )
-            from_response_object(t, team)
+            # from_response_object(t, team)
             teams.append(t)
         return teams
 
