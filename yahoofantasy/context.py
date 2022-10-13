@@ -1,7 +1,15 @@
+from __future__ import annotations
+
+import json
+from typing import List
+
 from pydash import get
 import requests
 from time import time
+
+from EZPZLogging.setup_logging import get_logger
 from .resources.league import League
+
 from yahoofantasy.util.logger import logger
 from yahoofantasy.api.fetch import make_request
 from yahoofantasy.api.parse import (
@@ -16,7 +24,7 @@ from yahoofantasy.util.persistence import DEFAULT_TTL, load, save
 YAHOO_OAUTH_URL = "https://api.login.yahoo.com/oauth2"
 
 
-class Context():
+class Context:
 
     def __init__(self, persist_key='',
                  client_id=None, client_secret=None, refresh_token=None):
@@ -96,12 +104,13 @@ class Context():
             self._get_access_token()
         return make_request(url, *args, token=self._access_token, **kwargs)
 
-    def get_leagues(self, game, season, persist_ttl=DEFAULT_TTL):
+    def get_leagues(self, game, season, persist_ttl=DEFAULT_TTL) -> List[League]:
         """ Get a list of all leagues for a given game and season
 
         Args:
             game (str) - the fantasy game we're looking at
             season (int/str) - the fantasy season to get leagues for
+            persist_ttl
         """
         game_id = get_game_id(game, season)
         data = self._load_or_fetch(
@@ -112,7 +121,20 @@ class Context():
         leagues = []
         for league_data in as_list(get(
                 data, 'fantasy_content.users.user.games.game.leagues.league')):
-            league = League(self, get_value(league_data['league_key']))
-            from_response_object(league, league_data)
+            league = League(
+                self,
+                get_value(league_data['name']),
+                get_value(league_data['league_key']),
+                get_value(league_data['league_id']),
+                get_value(league_data['draft_status']),
+                get_value(league_data['num_teams']),
+                get_value(league_data['scoring_type']),
+                get_value(league_data['league_type']),
+                get_value(league_data['renew']),
+                get_value(league_data['current_week']),
+                get_value(league_data['start_week']),
+                get_value(league_data['end_week']),
+                get_value(league_data['season']),
+            )
             leagues.append(league)
         return leagues

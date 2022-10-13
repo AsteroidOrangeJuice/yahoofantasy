@@ -1,17 +1,37 @@
+from __future__ import annotations
+from typing import TYPE_CHECKING
+if TYPE_CHECKING:
+    from yahoofantasy import League
+
 from yahoofantasy.api.parse import from_response_object, get_value
 from yahoofantasy.stats.stat import Stat
 
 
-class Player():
+class Player:
 
-    def __init__(self, league):
-        self.league = league
+    def __init__(self,
+                 league: League,
+                 player_id: int,
+                 first_name: str,
+                 last_name: str,
+                 ):
         # A cache of stats - a map of week num to the stats results
         self._stats_cache = {}
 
+        self.league = league
+        self.player_id = player_id
+        self.first_name = first_name
+        self.last_name = last_name
+
     @staticmethod
     def from_response(resp, league):
-        return from_response_object(Player(league), resp)
+        p = Player(
+            league=league,
+            player_id=get_value(resp["player_id"]),
+            first_name=get_value(resp["name"]["first"]),
+            last_name=get_value(resp["name"]["last"]),
+        )
+        return from_response_object(p, resp)
 
     def __repr__(self):
         try:

@@ -1,9 +1,10 @@
+from __future__ import annotations
 from .player import Player
 from yahoofantasy.api.parse import get_value, from_response_object
 from yahoofantasy.util.logger import logger
 
 
-class Roster():
+class Roster:
 
     def __init__(self, team, week_num=None):
         self.team = team
