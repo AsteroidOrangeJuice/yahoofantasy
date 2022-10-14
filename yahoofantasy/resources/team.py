@@ -51,11 +51,6 @@ class Team:
         self.number_of_moves = number_of_moves
         self.number_of_trades = number_of_trades
         self.draft_position = draft_position
-        logger = get_logger("team")
-        # logger.info(getmembers(managers_dict))
-        logger.info(json.dumps(managers_dict, indent=4))
-        # raise Exception("all managers?")
-        # exit()
         first_manager = managers_dict["manager"]
         self.managers = [
             TeamManager(first_manager["manager_id"]["$"], first_manager["nickname"]["$"], first_manager["guid"]["$"]),

@@ -57,8 +57,6 @@ class League:
         data = self.ctx._load_or_fetch('teams.' + self.id, 'teams', league=self.id)
         teams = []
         for team in data['fantasy_content']['league']['teams']['team']:
-            logger = get_logger("league")
-            logger.info(json.dumps(team, indent=4))
             t = Team(
                 self.ctx,
                 self,
